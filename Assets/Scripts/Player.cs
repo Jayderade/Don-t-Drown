@@ -6,14 +6,17 @@ public class Player : MonoBehaviour
 {
     
     public float minSpeed;
-    public static float maxSpeed;
+    public float maxSpeed;
     public float speed;
     public float jump;
     public bool jumpOnce = false;
-    public static bool onGround = true;
+    public bool onGround = true;
     public Rigidbody2D player;
     public Transform targetPos;
     public static Rigidbody2D PlayerReference;
+    public Transform feet;
+    public float checkRadius;
+    public LayerMask theGround;
 
     // Start is called before the first frame update
     void Start()
@@ -22,15 +25,43 @@ public class Player : MonoBehaviour
         PlayerReference = player;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        if (collision.gameObject.tag == "Ground")
+        {
+            onGround = true;
+            Invoke("ResetFriction", 1.5f);
+
+        }
+        if (collision.gameObject.tag == "Damage")
+        {
+            PlayerReference.sharedMaterial.friction = 1f;
+            Destroy(collision.gameObject);
+            maxSpeed = maxSpeed - 1;
+        }
+
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        if (collision.gameObject.tag == "Wave")
+        {
+           Destroy(this.gameObject.transform.parent.gameObject);
+            
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         #region Movement
-        if (Input.GetKey(KeyCode.RightArrow) && speed < maxSpeed)
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && speed < maxSpeed)
         {
             speed = speed + 1;
         }
-        if (Input.GetKey(KeyCode.LeftArrow) && speed > minSpeed)
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) && speed > minSpeed)
         {
             speed = speed - 1;
         }
@@ -46,20 +77,7 @@ public class Player : MonoBehaviour
 
         //we are not grounded
 
-        if (Input.GetKeyDown(KeyCode.Space) && onGround)
-        {
-            onGround = false;
-            //player = player.velocity.y +jump;
-            if (player.transform.position.y < targetPos.position.y)
-            {
-                //player.transform.position = Vector2.MoveTowards(player.transform.position, targetPos.position, jump * Time.deltaTime);
-                player.velocity = new Vector2(speed, jump);
-            }
-
-            jumpOnce = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && jumpOnce)
+        if (Input.GetKeyDown(KeyCode.Space) && jumpOnce && !onGround || Input.GetKeyDown(KeyCode.W) && jumpOnce && !onGround)
         {
             //player = player.velocity.y +jump;
             if (player.transform.position.y < targetPos.position.y)
@@ -71,6 +89,23 @@ public class Player : MonoBehaviour
             jumpOnce = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && onGround || Input.GetKeyDown(KeyCode.W) && onGround)
+        {
+            Debug.Log("W");
+            onGround = false;
+            jumpOnce = true;
+            //player = player.velocity.y +jump;
+            if (player.transform.position.y < targetPos.position.y)
+            {
+                //player.transform.position = Vector2.MoveTowards(player.transform.position, targetPos.position, jump * Time.deltaTime);
+                player.velocity = new Vector2(speed, jump);
+            }
+
+            
+        }
+
+       
+
         if (player.transform.position.y >= targetPos.position.y)
         {
             //player.velocity = new Vector2(speed, -jump);
@@ -79,7 +114,7 @@ public class Player : MonoBehaviour
 
         #endregion
 
-        
+        onGround = Physics2D.OverlapCircle(feet.position, checkRadius, theGround);
 
     }
         

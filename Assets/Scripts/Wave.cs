@@ -20,15 +20,5 @@ public class Wave : MonoBehaviour
         wave.velocity = new Vector2(speed, 0);
 
     }
-    void DestroyGameObject()
-    {
-        Destroy(Player.PlayerReference);
-    }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            DestroyGameObject();
-        }
-    }
+   
 }
