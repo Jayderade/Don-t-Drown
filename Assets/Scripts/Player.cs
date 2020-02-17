@@ -7,11 +7,14 @@ public class Player : MonoBehaviour
     
     public float minSpeed;
     public float maxSpeed;
-    public float speed;
+    public static float speed;
+    public float speedBoost;
     public float jump;
+    public static float boost;    
+    public bool onBoost = false;
     public bool jumpOnce = false;
     public bool onGround = true;
-    public bool colObj = false;
+    public static bool colObj = false;
     public Rigidbody2D player;
     public Transform targetPos;
     public static Rigidbody2D PlayerReference;
@@ -19,12 +22,12 @@ public class Player : MonoBehaviour
     public Transform frontBody;
     public float checkRadius;
     public LayerMask theGround;
-    public LayerMask obstacle;
+    public LayerMask boosted;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        boost = 0;
         PlayerReference = player;
     }
 
@@ -61,14 +64,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         #region Movement
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && speed < maxSpeed)
+       /* if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && speed < maxSpeed)
         {
             speed = speed + 1;
         }
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) && speed > minSpeed)
         {
             speed = speed - 1;
-        }
+        }*/
         if (onGround)
         {
             player.velocity = new Vector2(speed, player.velocity.y);
@@ -120,19 +123,28 @@ public class Player : MonoBehaviour
 
         if(colObj)
         {
-            speed = speed - 0.005f;
+            speed = speed - 2;
             
         }
-        if (!colObj)
-        {
-            speed = speed + 0.00001f;
-
-        }
+       
         
+        if(onBoost)
+        {
+            boost = 2;
+            speed = speedBoost;
+        }
+        else
+        {
+            boost = 0;
+            speed += Time.deltaTime + boost;
+        }
+
+        speedBoost = speed + boost;
 
         onGround = Physics2D.OverlapCircle(feet.position, checkRadius, theGround);
-        
-        colObj = Physics2D.OverlapCircle(frontBody.position, checkRadius, obstacle);
+
+        onBoost = Physics2D.OverlapCircle(feet.position, checkRadius, boosted);
+
 
     }
         

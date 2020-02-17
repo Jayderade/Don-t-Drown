@@ -8,6 +8,8 @@ TagManager:
   - Damage
   - Wave
   - Trampoline
+  - Obs
+  - Deleter
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - 
   - Ground
   - Objects
-  - 
+  - Boost
   - 
   - 
   - 
