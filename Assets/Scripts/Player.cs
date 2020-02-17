@@ -11,35 +11,39 @@ public class Player : MonoBehaviour
     public float jump;
     public bool jumpOnce = false;
     public bool onGround = true;
+    public bool colObj = false;
     public Rigidbody2D player;
     public Transform targetPos;
     public static Rigidbody2D PlayerReference;
     public Transform feet;
+    public Transform frontBody;
     public float checkRadius;
     public LayerMask theGround;
+    public LayerMask obstacle;
 
     // Start is called before the first frame update
     void Start()
     {
-        maxSpeed = 10;
+        
         PlayerReference = player;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         
-        if (collision.gameObject.tag == "Ground")
+       /* if (collision.gameObject.tag == "Ground")
         {
             onGround = true;
             Invoke("ResetFriction", 1.5f);
-
+            Debug.Log("W");
         }
         if (collision.gameObject.tag == "Damage")
         {
+            Debug.Log("W");
             PlayerReference.sharedMaterial.friction = 1f;
             Destroy(collision.gameObject);
             maxSpeed = maxSpeed - 1;
-        }
+        }*/
 
     }
 
@@ -91,7 +95,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && onGround || Input.GetKeyDown(KeyCode.W) && onGround)
         {
-            Debug.Log("W");
+            
             onGround = false;
             jumpOnce = true;
             //player = player.velocity.y +jump;
@@ -114,7 +118,21 @@ public class Player : MonoBehaviour
 
         #endregion
 
+        if(colObj)
+        {
+            speed = speed - 0.005f;
+            
+        }
+        if (!colObj)
+        {
+            speed = speed + 0.00001f;
+
+        }
+        
+
         onGround = Physics2D.OverlapCircle(feet.position, checkRadius, theGround);
+        
+        colObj = Physics2D.OverlapCircle(frontBody.position, checkRadius, obstacle);
 
     }
         
