@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public static float speed;
     public float speedBoost;
     public float jump;
+    public float running;
     public static float boost;    
     public bool onBoost = false;
     public bool jumpOnce = false;
@@ -64,17 +65,19 @@ public class Player : MonoBehaviour
     void Update()
     {
         #region Movement
-       /* if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && speed < maxSpeed)
-        {
-            speed = speed + 1;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) && speed > minSpeed)
-        {
-            speed = speed - 1;
-        }*/
+
+        player.velocity = new Vector2(speed, player.velocity.y);
+        /* if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && speed < maxSpeed)
+         {
+             speed = speed + 1;
+         }
+         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) && speed > minSpeed)
+         {
+             speed = speed - 1;
+         }*/
         if (onGround)
         {
-            player.velocity = new Vector2(speed, player.velocity.y);
+            
             jumpOnce = false;
         }
         //Check if grounded
@@ -123,23 +126,24 @@ public class Player : MonoBehaviour
 
         if(colObj)
         {
-            speed = speed - 2;
-            
+            speed = speed - 1;
+            colObj = false;
         }
        
         
         if(onBoost)
         {
             boost = 2;
-            speed = speedBoost;
+            speed = running + boost;
+            
         }
-        else
+        if(!onBoost)
         {
             boost = 0;
-            speed += Time.deltaTime + boost;
+            speed = running;
         }
 
-        speedBoost = speed + boost;
+        running += Time.deltaTime;
 
         onGround = Physics2D.OverlapCircle(feet.position, checkRadius, theGround);
 

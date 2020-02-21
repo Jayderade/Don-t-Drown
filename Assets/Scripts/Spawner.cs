@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cam : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
-    public float fast;
-    public Rigidbody2D cam;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +13,6 @@ public class Cam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        fast = Player.speed;
-        cam.velocity = new Vector2(fast, cam.velocity.y);
+        
     }
 }
