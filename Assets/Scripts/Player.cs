@@ -8,13 +8,15 @@ public class Player : MonoBehaviour
     public float minSpeed;
     public float maxSpeed;
     public static float speed;
-    public float speedBoost;
+    public float speedBoost = 1;
     public float jump;
     public float running;
-    public static float boost;    
+    public static float boost;
+    public bool test;
     public bool onBoost = false;
     public bool jumpOnce = false;
     public bool onGround = true;
+    public bool bounce = false;
     public static bool colObj = false;
     public Rigidbody2D player;
     public Transform targetPos;
@@ -24,32 +26,17 @@ public class Player : MonoBehaviour
     public float checkRadius;
     public LayerMask theGround;
     public LayerMask boosted;
+    public LayerMask tramp;
 
     // Start is called before the first frame update
     void Start()
     {
         boost = 0;
         PlayerReference = player;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
         
-       /* if (collision.gameObject.tag == "Ground")
-        {
-            onGround = true;
-            Invoke("ResetFriction", 1.5f);
-            Debug.Log("W");
-        }
-        if (collision.gameObject.tag == "Damage")
-        {
-            Debug.Log("W");
-            PlayerReference.sharedMaterial.friction = 1f;
-            Destroy(collision.gameObject);
-            maxSpeed = maxSpeed - 1;
-        }*/
-
     }
+
+    
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -64,6 +51,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        test = colObj;
         #region Movement
 
         player.velocity = new Vector2(speed, player.velocity.y);
@@ -123,32 +111,73 @@ public class Player : MonoBehaviour
         }
 
         #endregion
-
+        maxSpeed = boost;
         if(colObj)
         {
-            speed = speed - 1;
-            colObj = false;
+           if(running <= 5)
+            {
+                running = 0;
+            }
+            if (running <= 10)
+            {
+                running = 4;
+            }
+            if (running <= 15)
+            {
+                running = 7;
+            }
+
+
         }
-       
         
-        if(onBoost)
+        
+        if(bounce && !onGround)
         {
-            boost = 2;
-            speed = running + boost;
-            
+            if (player.transform.position.y < targetPos.position.y)
+            {
+                //player.transform.position = Vector2.MoveTowards(player.transform.position, targetPos.position, jump * Time.deltaTime);
+                player.velocity = new Vector2(speed, 15);
+            }
         }
-        if(!onBoost)
+
+        if (onBoost)
+        {
+            boost = 5f;
+            
+            if (speed < 15)
+            {
+                speed = running + boost;
+                
+            }
+          
+        }
+        if(!onBoost && ! colObj)
         {
             boost = 0;
-            speed = running;
+
+            if (speed < 15)
+            {
+                speed = running + boost;
+                
+            }
+           
         }
-
-        running += Time.deltaTime;
-
+        if (running < 15)
+        {
+            speed = running;
+            running += 2 * Time.deltaTime;
+            
+        }
+        if (speed > 15)
+        {          
+            
+            running = 15;
+        }
         onGround = Physics2D.OverlapCircle(feet.position, checkRadius, theGround);
 
         onBoost = Physics2D.OverlapCircle(feet.position, checkRadius, boosted);
 
+        bounce = Physics2D.OverlapCircle(feet.position, checkRadius, tramp);
 
     }
         

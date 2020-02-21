@@ -17,7 +17,16 @@ public class Wave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        speed += Time.deltaTime;
+        if (speed <= 15)
+        {
+            speed += Time.deltaTime;
+        }
+        if (speed >= 15)
+        {
+            speed = 15;
+        }
+
+        
         wave.velocity = new Vector2(speed, 0);
 
     }
