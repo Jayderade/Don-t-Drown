@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
     public int spawnInterval = 1;
     public float spawntimer1;
     public float spawntimer2;    
-    private bool hasSpawned = false;
+    
 
     void Start()
     {
@@ -86,15 +86,13 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnNow()
     {
-        // run whatever is here first
-        hasSpawned = true;
+        
 
         // Spawn the Enemy
         SpawnEnemies();
 
         yield return new WaitForSeconds(spawnInterval); // wait a few seconds
 
-        // run whatever is here last
-        hasSpawned = false;
+        
     }
 }
