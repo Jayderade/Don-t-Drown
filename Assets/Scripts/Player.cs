@@ -5,18 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     
-    public float minSpeed;
-    public float maxSpeed;
+   
     public static float speed;
     public float speedBoost = 1;
     public float jump;
     public float running;
-    public static float boost;
-    public bool test;
+    public static float boost;    
     public bool onBoost = false;
     public bool jumpOnce = false;
     public bool onGround = true;
     public bool bounce = false;
+    public static bool died = false;
+    public static bool pickUpCoin;
     public static bool colObj = false;
     public Rigidbody2D player;
     public Transform targetPos;
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     public LayerMask theGround;
     public LayerMask boosted;
     public LayerMask tramp;
+    public LayerMask coin;
 
     // Start is called before the first frame update
     void Start()
@@ -44,14 +45,14 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Wave")
         {
            Destroy(this.gameObject.transform.parent.gameObject);
-            
+            died = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        test = colObj;
+       
         #region Movement
 
         player.velocity = new Vector2(speed, player.velocity.y);
@@ -65,9 +66,10 @@ public class Player : MonoBehaviour
          }*/
         if (onGround)
         {
-            
+             
             jumpOnce = false;
         }
+        
         //Check if grounded
 
         //if grounded and key pressed 
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour
         }
 
         #endregion
-        maxSpeed = boost;
+        
         if(colObj)
         {
            if(running <= 5)
@@ -129,14 +131,14 @@ public class Player : MonoBehaviour
 
 
         }
-        
+        speedBoost = speed;
         
         if(bounce && !onGround)
         {
             if (player.transform.position.y < targetPos.position.y)
             {
                 //player.transform.position = Vector2.MoveTowards(player.transform.position, targetPos.position, jump * Time.deltaTime);
-                player.velocity = new Vector2(speed, 15);
+                player.velocity = new Vector2(speed, 30);
             }
         }
 
@@ -144,22 +146,20 @@ public class Player : MonoBehaviour
         {
             boost = 5f;
             
-            if (speed < 15)
-            {
+            
                 speed = running + boost;
                 
-            }
+            
           
         }
-        if(!onBoost && ! colObj)
+        if(!onBoost && !colObj)
         {
             boost = 0;
 
-            if (speed < 15)
-            {
+           
                 speed = running + boost;
                 
-            }
+            
            
         }
         if (running < 15)
@@ -179,6 +179,7 @@ public class Player : MonoBehaviour
 
         bounce = Physics2D.OverlapCircle(feet.position, checkRadius, tramp);
 
+        pickUpCoin = Physics2D.OverlapCircle(frontBody.position, checkRadius, coin);
     }
         
 

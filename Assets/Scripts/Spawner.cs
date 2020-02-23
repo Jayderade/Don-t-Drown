@@ -41,7 +41,7 @@ public class Spawner : MonoBehaviour
         if (gameTime >= 80)
         {
             
-            spawntimer2 = 3;
+            spawntimer2 = 0.5f;
         }
 
         timer += Time.deltaTime;

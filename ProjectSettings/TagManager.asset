@@ -10,6 +10,7 @@ TagManager:
   - Trampoline
   - Obs
   - Deleter
+  - Coin
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - Objects
   - Boost
   - Tramp
-  - 
-  - 
+  - Damage
+  - Coins
   - 
   - 
   - 

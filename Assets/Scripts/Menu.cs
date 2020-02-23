@@ -9,16 +9,15 @@ public class Menu : MonoBehaviour
 
     
 
-    public bool fullscreenBool;
-    public bool makeFullscreen;
+    
     public bool inGame;
     public bool pauseBool;
     public bool showPause;
-    public bool musicPlay;
+    
 
     [Header("GameObjects")]
     public GameObject mainMenu;
-    
+    public GameObject drownMenu;
 
 
 
@@ -51,7 +50,12 @@ public class Menu : MonoBehaviour
 
     public void Update()
     {
-
+        if(Player.died)
+        {
+            drownMenu.SetActive(true);
+            TogglePause();
+            mainMenu.SetActive(false);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

@@ -15,6 +15,14 @@ public class Damage : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.tag == "Coin")
+        {
+
+
+            
+            Destroy(collision.gameObject);
+
+        }
 
         if (collision.gameObject.tag == "Damage")
         {
@@ -26,7 +34,7 @@ public class Damage : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         
 
