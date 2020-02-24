@@ -18,6 +18,7 @@ public class Menu : MonoBehaviour
     [Header("GameObjects")]
     public GameObject mainMenu;
     public GameObject drownMenu;
+    public GameObject beginMenu;
 
 
 
@@ -27,12 +28,13 @@ public class Menu : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(0);
+        drownMenu.SetActive(false);
     }
 
 
     public void Awake()
     {
-        Time.timeScale = 1;
+        Time.timeScale = 0;
 
 
     }
@@ -50,6 +52,12 @@ public class Menu : MonoBehaviour
 
     public void Update()
     {
+        if(Input.anyKeyDown)
+        {
+            beginMenu.SetActive(false);
+            Time.timeScale = 1;
+        }
+
         if(Player.died)
         {
             drownMenu.SetActive(true);
