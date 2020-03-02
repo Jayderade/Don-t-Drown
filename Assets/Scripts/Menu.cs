@@ -27,8 +27,11 @@ public class Menu : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(0);
+        Player.died = false;
+        inGame = false;
         drownMenu.SetActive(false);
+        SceneManager.LoadScene(0);
+       
     }
 
 
@@ -44,7 +47,7 @@ public class Menu : MonoBehaviour
     public void Start()
     {
         inGame = false;
-
+        drownMenu.SetActive(false);
 
 
 
@@ -82,27 +85,6 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene(0);
         inGame = true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
 
     public void Exit()
     {
