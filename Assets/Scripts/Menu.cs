@@ -66,6 +66,7 @@ public class Menu : MonoBehaviour
             drownMenu.SetActive(true);
             TogglePause();
             mainMenu.SetActive(false);
+            Time.timeScale = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
